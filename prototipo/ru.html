@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RU IFMA – Restaurante Universitário</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #1a5c2e;
+    --green-main: #2a7a3e;
+    --green-mid: #3a9452;
+    --green-light: #e8f5ec;
+    --green-accent: #4caf70;
+    --gold: #f0b429;
+    --red: #e53e3e;
+    --red-light: #fff5f5;
+    --blue: #3b82f6;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-400: #9ca3af;
+    --gray-600: #4b5563;
+    --gray-800: #1f2937;
+    --white: #ffffff;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.1);
+    --shadow-md: 0 4px 12px rgba(0,0,0,.12);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,.15);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #e0e5e2;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  /* ── Phone Shell ─────────────────────────────── */
+  .phone {
+    width: 390px;
+    min-height: 780px;
+    background: var(--white);
+    border-radius: 44px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.35), 0 0 0 10px #1a1a1a, inset 0 0 0 2px #333;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Status bar */
+  .status-bar {
+    background: var(--green-dark);
+    padding: 12px 28px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width:16px; height:16px; fill:white; }
+
+  /* ── Screens ─────────────────────────────────── */
+  .screen {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    animation: fadeIn .25s ease;
+  }
+  .screen.active { display: flex; }
+
+  @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+  /* Scrollable content */
+  .scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .scroll-area::-webkit-scrollbar { display: none; }
+
+  /* ── Top Header ──────────────────────────────── */
+  .top-header {
+    background: var(--green-dark);
+    color: white;
+    padding: 20px 24px 24px;
+    flex-shrink: 0;
+  }
+  .top-header h2 { font-size: 22px; font-weight: 800; }
+  .top-header p { font-size: 13px; opacity: .8; margin-top: 2px; }
+  .top-header .back-btn {
+    display: flex; align-items: center; gap: 6px;
+    background: none; border: none; color: white;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    margin-bottom: 12px; padding: 0; opacity: .9;
+  }
+  .top-header .back-btn:hover { opacity: 1; }
+
+  /* ── Bottom Nav ──────────────────────────────── */
+  .bottom-nav {
+    background: white;
+    border-top: 1px solid var(--gray-200);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0 16px;
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 3px; cursor: pointer; border: none; background: none;
+    font-family: 'Nunito', sans-serif; padding: 4px 8px;
+  }
+  .nav-item span { font-size: 10.5px; font-weight: 600; color: var(--gray-400); }
+  .nav-item svg { width: 22px; height: 22px; stroke: var(--gray-400); fill: none; stroke-width: 2; }
+  .nav-item.active span { color: var(--green-main); }
+  .nav-item.active svg { stroke: var(--green-main); }
+
+  /* ── Buttons ─────────────────────────────────── */
+  .btn {
+    display: block; width: 100%; padding: 16px;
+    border-radius: 14px; border: none; cursor: pointer;
+    font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 800;
+    transition: filter .15s, transform .1s;
+    text-align: center;
+  }
+  .btn:hover { filter: brightness(1.05); }
+  .btn:active { transform: scale(.98); }
+  .btn-primary { background: var(--green-main); color: white; }
+  .btn-outline { background: transparent; border: 2px solid var(--green-main); color: var(--green-main); }
+  .btn-danger { background: transparent; border: none; color: var(--red); font-size: 15px; font-weight: 700; }
+  .btn-sm {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 20px; font-size: 13px;
+    font-weight: 700; cursor: pointer; border: none; font-family: 'Nunito', sans-serif;
+  }
+  .btn-sm-green { background: rgba(255,255,255,.2); color: white; }
+
+  /* ── Form ────────────────────────────────────── */
+  .form-group { margin-bottom: 18px; }
+  .form-label { display: block; font-size: 14px; font-weight: 700; color: var(--gray-800); margin-bottom: 8px; }
+  .form-input {
+    width: 100%; padding: 14px 16px;
+    border: 2px solid var(--gray-200); border-radius: var(--radius-sm);
+    font-family: 'Nunito', sans-serif; font-size: 15px; color: var(--gray-800);
+    outline: none; transition: border-color .2s;
+  }
+  .form-input:focus { border-color: var(--green-main); }
+  .form-input.placeholder { color: var(--gray-400); }
+
+  /* ── Cards & Sections ────────────────────────── */
+  .card {
+    background: white; border-radius: var(--radius);
+    box-shadow: var(--shadow-sm); overflow: hidden;
+  }
+  .section-title {
+    font-size: 12px; font-weight: 800; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--gray-600);
+    margin: 20px 24px 12px;
+  }
+
+  /* ── Badges ──────────────────────────────────── */
+  .badge {
+    display: inline-flex; align-items: center;
+    padding: 3px 10px; border-radius: 20px;
+    font-size: 11.5px; font-weight: 700;
+  }
+  .badge-green { background: var(--green-light); color: var(--green-main); }
+  .badge-yellow { background: #fef3c7; color: #92400e; }
+  .badge-red { background: var(--red-light); color: var(--red); }
+  .badge-gray { background: var(--gray-100); color: var(--gray-600); }
+  .badge-valid { background: var(--green-light); color: var(--green-main); font-size: 13px; padding: 5px 16px; }
+
+  /* ──────────────────────────────────────────────
+     SCREEN 1 – LOGIN
+  ────────────────────────────────────────────── */
+  #screen-login .login-header {
+    background: var(--green-dark);
+    padding: 48px 24px 36px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 10px;
+  }
+  .app-icon {
+    width: 72px; height: 72px; border-radius: 20px;
+    background: rgba(255,255,255,.15);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .app-icon svg { width: 36px; height: 36px; stroke: white; fill: none; stroke-width: 2; }
+  .app-title { font-size: 26px; font-weight: 900; color: white; }
+  .app-subtitle { font-size: 13px; color: rgba(255,255,255,.75); font-weight: 600; }
+
+  #screen-login .login-body {
+    flex: 1; padding: 28px 24px;
+    display: flex; flex-direction: column;
+  }
+  .forgot-link { text-align: center; font-size: 14px; color: var(--gray-600); margin-top: 14px; }
+  .forgot-link a { color: var(--green-main); font-weight: 700; text-decoration: none; cursor: pointer; }
+
+  .access-as { margin-top: 28px; }
+  .access-as p { text-align: center; font-size: 13px; font-weight: 600; color: var(--gray-600); margin-bottom: 14px; }
+  .access-as .roles { display: flex; justify-content: center; gap: 28px; }
+  .role-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+    cursor: pointer; border: none; background: none; font-family: 'Nunito', sans-serif;
+  }
+  .role-btn .icon { font-size: 24px; }
+  .role-btn span { font-size: 12px; font-weight: 700; color: var(--gray-600); }
+  .role-btn:hover span { color: var(--green-main); }
+
+  /* ──────────────────────────────────────────────
+     SCREEN 2 – HOME (DASHBOARD)
+  ────────────────────────────────────────────── */
+  #screen-home .home-header {
+    background: var(--green-dark);
+    padding: 20px 24px 28px;
+    flex-shrink: 0;
+  }
+  .greeting { font-size: 14px; color: rgba(255,255,255,.8); font-weight: 600; }
+  .user-name { font-size: 24px; font-weight: 900; color: white; margin-bottom: 16px; }
+
+  .credits-card {
+    background: rgba(255,255,255,.15);
+    border-radius: 14px; padding: 14px 16px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .credits-label { font-size: 11px; color: rgba(255,255,255,.7); font-weight: 700; text-transform: uppercase; }
+  .credits-value { font-size: 36px; font-weight: 900; color: white; line-height: 1; margin: 4px 0 2px; }
+  .credits-expiry { font-size: 11px; color: rgba(255,255,255,.65); font-weight: 600; }
+
+  .quick-actions { padding: 0 24px; }
+  .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .action-card {
+    background: white; border-radius: var(--radius); padding: 16px;
+    box-shadow: var(--shadow-sm); cursor: pointer;
+    transition: box-shadow .2s, transform .15s;
+  }
+  .action-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .action-icon { font-size: 28px; margin-bottom: 8px; }
+  .action-title { font-size: 14px; font-weight: 800; color: var(--gray-800); }
+  .action-sub { font-size: 12px; color: var(--gray-400); font-weight: 600; margin-top: 2px; }
+
+  .menu-today { padding: 0 24px 4px; }
+  .menu-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 16px; }
+  .menu-date { font-size: 13px; font-weight: 600; color: var(--gray-400); margin-bottom: 12px; }
+  .menu-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0; border-bottom: 1px solid var(--gray-100);
+  }
+  .menu-item:last-child { border-bottom: none; }
+  .menu-item-left { display: flex; align-items: center; gap: 8px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-green { background: var(--green-accent); }
+  .dot-yellow { background: var(--gold); }
+  .dot-red { background: var(--red); }
+  .menu-item-name { font-size: 14px; font-weight: 700; color: var(--gray-800); }
+  .menu-item-cat { font-size: 11px; color: var(--gray-400); font-weight: 600; }
+
+  .notices { padding: 0 24px 24px; }
+  .notice-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+  .notice-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 14px 16px; border-bottom: 1px solid var(--gray-100);
+  }
+  .notice-item:last-child { border-bottom: none; }
+  .notice-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-accent); margin-top: 5px; flex-shrink: 0; }
+  .notice-dot.warn { background: var(--gold); }
+  .notice-text { font-size: 13.5px; font-weight: 600; color: var(--gray-800); }
+  .notice-time { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+
+  /* ──────────────────────────────────────────────
+     SCREEN 3 – RESERVA
+  ────────────────────────────────────────────── */
+  .reserve-body { padding: 20px 24px 24px; }
+  .turn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .turn-option {
+    background: var(--gray-50); border: 2px solid var(--gray-200);
+    border-radius: var(--radius); padding: 16px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    cursor: pointer; transition: all .2s;
+  }
+  .turn-option.selected { background: var(--green-light); border-color: var(--green-main); }
+  .turn-option .t-icon { font-size: 28px; }
+  .turn-option .t-name { font-size: 15px; font-weight: 800; color: var(--gray-800); }
+  .turn-option .t-hours { font-size: 12px; color: var(--gray-400); font-weight: 600; }
+  .turn-option.selected .t-name { color: var(--green-main); }
+
+  .date-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 20px; }
+  .date-strip::-webkit-scrollbar { display: none; }
+  .date-day {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 10px 14px; border-radius: 12px; cursor: pointer;
+    background: var(--gray-50); border: 2px solid transparent; flex-shrink: 0;
+    transition: all .2s;
+  }
+  .date-day .d-name { font-size: 11px; font-weight: 700; color: var(--gray-400); }
+  .date-day .d-num { font-size: 20px; font-weight: 900; color: var(--gray-800); margin-top: 2px; }
+  .date-day.selected { background: var(--green-main); border-color: var(--green-main); }
+  .date-day.selected .d-name, .date-day.selected .d-num { color: white; }
+
+  .availability-row {
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--gray-50); border-radius: var(--radius-sm);
+    padding: 14px 16px; margin-bottom: 16px;
+  }
+  .av-label { font-size: 13px; font-weight: 600; color: var(--gray-600); }
+  .av-value { font-size: 20px; font-weight: 900; color: var(--green-main); }
+
+  .policy-box {
+    background: var(--green-light); border-radius: var(--radius-sm);
+    padding: 14px 16px; margin-bottom: 20px;
+    font-size: 13px; color: var(--green-dark); line-height: 1.5;
+  }
+  .policy-box strong { font-weight: 800; }
+
+  /* ──────────────────────────────────────────────
+     SCREEN 4 – TICKET
+  ────────────────────────────────────────────── */
+  .ticket-body { padding: 20px 24px 24px; }
+  .ticket-card {
+    background: white; border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.1);
+    overflow: hidden;
+  }
+  .ticket-header-inner {
+    background: var(--green-dark); padding: 20px 24px;
+    text-align: center;
+  }
+  .ticket-inst { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.7); margin-bottom: 8px; }
+  .ticket-meal { font-size: 22px; font-weight: 900; color: white; }
+  .ticket-date { font-size: 14px; color: rgba(255,255,255,.8); margin-top: 4px; }
+
+  .qr-wrapper { padding: 24px; text-align: center; }
+  .qr-svg { width: 160px; height: 160px; }
+  .valid-badge { margin-top: 12px; }
+  .present-text { font-size: 12.5px; color: var(--gray-400); margin-top: 8px; font-weight: 600; }
+
+  .ticket-info { display: grid; grid-template-columns: 1fr 1fr; padding: 16px 24px; gap: 16px; border-top: 1px dashed var(--gray-200); }
+  .ticket-info-item .ti-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--gray-400); }
+  .ticket-info-item .ti-value { font-size: 15px; font-weight: 800; color: var(--gray-800); margin-top: 3px; }
+
+  /* ──────────────────────────────────────────────
+     SCREEN 5 – CARDÁPIO SEMANAL
+  ────────────────────────────────────────────── */
+  .days-tab { display: flex; gap: 0; background: var(--green-dark); padding: 0 16px 16px; overflow-x: auto; }
+  .days-tab::-webkit-scrollbar { display: none; }
+  .day-tab {
+    flex-shrink: 0; padding: 8px 16px; border-radius: 20px;
+    font-size: 13px; font-weight: 700; color: rgba(255,255,255,.65);
+    cursor: pointer; white-space: nowrap; border: none; background: none;
+    font-family: 'Nunito', sans-serif;
+  }
+  .day-tab.active { background: white; color: var(--green-dark); }
+
+  .menu-section { padding: 0 20px; margin-bottom: 4px; }
+  .meal-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 16px 0 8px; font-size: 16px; font-weight: 800; color: var(--gray-800);
+  }
+  .menu-row {
+    display: flex; align-items: center; padding: 12px 0;
+    border-bottom: 1px solid var(--gray-100); gap: 12px;
+  }
+  .menu-row:last-child { border-bottom: none; }
+  .menu-emoji { font-size: 24px; width: 36px; text-align: center; }
+  .menu-info { flex: 1; }
+  .menu-info .m-name { font-size: 14px; font-weight: 700; color: var(--gray-800); }
+  .menu-info .m-cat { font-size: 12px; color: var(--gray-400); font-weight: 600; }
+
+  /* ──────────────────────────────────────────────
+     SCREEN 6 – HISTÓRICO
+  ────────────────────────────────────────────── */
+  .hist-header-credits {
+    background: var(--green-dark); padding: 20px 24px 28px;
+    flex-shrink: 0;
+  }
+  .credits-big { font-size: 40px; font-weight: 900; color: white; line-height: 1; margin: 6px 0 4px; }
+
+  .hist-list { padding: 0 20px 24px; }
+  .hist-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 0; border-bottom: 1px solid var(--gray-100);
+  }
+  .hist-item:last-child { border-bottom: none; }
+  .hist-icon {
+    width: 40px; height: 40px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+    flex-shrink: 0;
+  }
+  .hist-icon.green { background: var(--green-light); }
+  .hist-icon.blue { background: #dbeafe; }
+  .hist-icon.red { background: var(--red-light); }
+  .hist-icon.moon { background: #ede9fe; }
+  .hist-info { flex: 1; }
+  .hist-title { font-size: 14px; font-weight: 700; color: var(--gray-800); }
+  .hist-sub { font-size: 12px; color: var(--gray-400); font-weight: 600; margin-top: 2px; }
+  .hist-value { font-size: 16px; font-weight: 800; }
+  .hist-value.neg { color: var(--red); }
+  .hist-value.pos { color: var(--green-main); }
+
+  /* ──────────────────────────────────────────────
+     SCREEN 7 – CONFIRM MODAL / RESERVA CONFIRMADA
+  ────────────────────────────────────────────── */
+  #screen-confirm .confirm-body {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 28px; text-align: center;
+  }
+  .confirm-icon { font-size: 72px; margin-bottom: 20px; }
+  .confirm-title { font-size: 26px; font-weight: 900; color: var(--gray-800); margin-bottom: 8px; }
+  .confirm-sub { font-size: 15px; color: var(--gray-400); font-weight: 600; line-height: 1.5; }
+  .confirm-details {
+    background: var(--green-light); border-radius: var(--radius);
+    padding: 18px 20px; margin: 24px 0; width: 100%;
+    text-align: left;
+  }
+  .cd-row { display: flex; justify-content: space-between; padding: 5px 0; }
+  .cd-label { font-size: 13px; color: var(--gray-600); font-weight: 600; }
+  .cd-value { font-size: 13px; color: var(--gray-800); font-weight: 800; }
+
+  /* ──────────────────────────────────────────────
+     SCREEN – ACESSIBILIDADE (alto contraste)
+  ────────────────────────────────────────────── */
+  body.high-contrast {
+    --green-dark: #003d1a;
+    --green-main: #005c28;
+    --gray-400: #555;
+    --gray-600: #333;
+  }
+  body.high-contrast .form-input { border-width: 3px; }
+  body.high-contrast .btn { font-size: 18px; }
+
+  /* ── Accessibility toggle ────────────────────── */
+  .a11y-btn {
+    position: absolute; top: 14px; right: 16px;
+    background: rgba(255,255,255,.2); border: none; border-radius: 20px;
+    padding: 5px 10px; font-size: 11px; font-weight: 700; color: white;
+    cursor: pointer; font-family: 'Nunito', sans-serif; z-index: 10;
+  }
+
+  /* ── Demo nav bar outside phone ─────────────── */
+  .demo-info {
+    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,.75); color: white; border-radius: 20px;
+    padding: 8px 18px; font-size: 12px; font-weight: 700;
+    font-family: 'Nunito', sans-serif; pointer-events: none;
+    white-space: nowrap; backdrop-filter: blur(8px);
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-info">📱 RU IFMA — Protótipo Hi-Fi Interativo</div>
+
+<div class="phone">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar" id="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24"><path d="M1 6l5 5 5-5 5 5 5-5" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="2" fill="none" stroke="white" stroke-width="2"/><rect x="22" y="10" width="2" height="5" rx="1" fill="white"/><rect x="4" y="9" width="14" height="7" rx="1" fill="white"/></svg>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 1: LOGIN
+  ═══════════════════════════════════════════ -->
+  <div id="screen-login" class="screen active">
+    <div class="login-header">
+      <button class="a11y-btn" onclick="toggleA11y()">♿ Acessibilidade</button>
+      <div class="app-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M6 12s1-4 6-4 6 4 6 4" stroke-linecap="round"/><circle cx="12" cy="12" r="2" fill="white"/></svg>
+      </div>
+      <div class="app-title">RU IFMA</div>
+      <div class="app-subtitle">Restaurante Universitário</div>
+    </div>
+    <div class="login-body">
+      <div class="form-group">
+        <label class="form-label">Matrícula institucional</label>
+        <input class="form-input" type="text" placeholder="Ex.: 2024101234" id="matricula-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Senha</label>
+        <input class="form-input" type="password" placeholder="••••••••" id="senha-input">
+      </div>
+      <button class="btn btn-primary" onclick="goTo('screen-home')">Entrar</button>
+      <p class="forgot-link">Esqueceu a senha? <a onclick="alert('Link de recuperação enviado para seu e-mail institucional.')">Recuperar acesso</a></p>
+
+      <div class="access-as" style="margin-top:auto;">
+        <p>Acesse como:</p>
+        <div class="roles">
+          <button class="role-btn" onclick="setRole('Estudante')">
+            <span class="icon">🎓</span>
+            <span>Estudante</span>
+          </button>
+          <button class="role-btn" onclick="setRole('Funcionário')">
+            <span class="icon">👤</span>
+            <span>Funcionário</span>
+          </button>
+          <button class="role-btn" onclick="setRole('Admin')">
+            <span class="icon">🔧</span>
+            <span>Admin</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 2: HOME
+  ═══════════════════════════════════════════ -->
+  <div id="screen-home" class="screen">
+    <div class="home-header" style="position:relative;">
+      <button class="a11y-btn" onclick="toggleA11y()">♿</button>
+      <p class="greeting">Bom dia 👋</p>
+      <p class="user-name" id="username-display">Lucas Garcia</p>
+      <div class="credits-card">
+        <div>
+          <div class="credits-label">Créditos disponíveis</div>
+          <div class="credits-value">8</div>
+          <div class="credits-expiry">Válidos até 30/06/2026</div>
+        </div>
+        <button class="btn-sm btn-sm-green" onclick="goTo('screen-hist')">+ Recarregar</button>
+      </div>
+    </div>
+
+    <div class="scroll-area">
+      <p class="section-title">Ações Rápidas</p>
+      <div class="quick-actions">
+        <div class="actions-grid">
+          <div class="action-card" onclick="goTo('screen-reserva')">
+            <div class="action-icon">📅</div>
+            <div class="action-title">Fazer reserva</div>
+            <div class="action-sub">Almoço ou jantar</div>
+          </div>
+          <div class="action-card" onclick="goTo('screen-ticket')">
+            <div class="action-icon">🎟️</div>
+            <div class="action-title">Meu ticket</div>
+            <div class="action-sub">Hoje — Almoço</div>
+          </div>
+          <div class="action-card" onclick="goTo('screen-cardapio')">
+            <div class="action-icon">🍽️</div>
+            <div class="action-title">Cardápio</div>
+            <div class="action-sub">Ver de hoje</div>
+          </div>
+          <div class="action-card" onclick="goTo('screen-hist')">
+            <div class="action-icon">📋</div>
+            <div class="action-title">Histórico</div>
+            <div class="action-sub">Minhas refeições</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="section-title">Cardápio de Hoje</p>
+      <div class="menu-today">
+        <div class="menu-card">
+          <div class="menu-date">Almoço — Segunda-feira</div>
+          <div class="menu-item">
+            <div class="menu-item-left"><div class="dot dot-green"></div><span class="menu-item-name">Arroz e feijão</span></div>
+            <span class="menu-item-cat">Base</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-left"><div class="dot dot-green"></div><span class="menu-item-name">Frango grelhado</span></div>
+            <span class="menu-item-cat">Proteína</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-left"><div class="dot dot-yellow"></div><span class="menu-item-name">Salada de alface</span></div>
+            <span class="menu-item-cat">Salada</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-left"><div class="dot dot-green"></div><span class="menu-item-name">Suco de maracujá</span></div>
+            <span class="menu-item-cat">Bebida</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="section-title">Avisos</p>
+      <div class="notices">
+        <div class="notice-card">
+          <div class="notice-item">
+            <div class="notice-dot"></div>
+            <div>
+              <div class="notice-text">Almoço de amanhã terá alteração no cardápio.</div>
+              <div class="notice-time">Há 30 min</div>
+            </div>
+          </div>
+          <div class="notice-item">
+            <div class="notice-dot warn"></div>
+            <div>
+              <div class="notice-text">Seus créditos expiram em 30 dias.</div>
+              <div class="notice-time">Ontem</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="bottom-nav">
+      <button class="nav-item active" onclick="goTo('screen-home')">
+        <svg viewBox="0 0 24 24"><path d="M3 12L12 3l9 9"/><path d="M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
+        <span>Início</span>
+      </button>
+      <button class="nav-item" onclick="goTo('screen-reserva')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        <span>Reserva</span>
+      </button>
+      <button class="nav-item" onclick="goTo('screen-ticket')">
+        <svg viewBox="0 0 24 24"><path d="M2 9a2 2 0 012-2h16a2 2 0 012 2v2a2 2 0 000 4v2a2 2 0 01-2 2H4a2 2 0 01-2-2v-2a2 2 0 000-4V9z"/></svg>
+        <span>Ticket</span>
+      </button>
+      <button class="nav-item" onclick="goTo('screen-cardapio')">
+        <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        <span>Cardápio</span>
+      </button>
+      <button class="nav-item" onclick="goTo('screen-hist')">
+        <svg viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
+        <span>Histórico</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 3: RESERVA
+  ═══════════════════════════════════════════ -->
+  <div id="screen-reserva" class="screen">
+    <div class="top-header">
+      <button class="back-btn" onclick="goBack()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Voltar
+      </button>
+      <h2>Nova reserva</h2>
+    </div>
+
+    <div class="scroll-area">
+      <div class="reserve-body">
+        <p class="section-title" style="margin:0 0 12px;">Selecione o turno</p>
+        <div class="turn-grid">
+          <div class="turn-option selected" id="turn-almoco" onclick="selectTurn('almoco')">
+            <div class="t-icon">☀️</div>
+            <div class="t-name">Almoço</div>
+            <div class="t-hours">11h – 14h</div>
+          </div>
+          <div class="turn-option" id="turn-jantar" onclick="selectTurn('jantar')">
+            <div class="t-icon">🌙</div>
+            <div class="t-name">Jantar</div>
+            <div class="t-hours">17h – 20h</div>
+          </div>
+        </div>
+
+        <p class="section-title" style="margin:0 0 12px;">Selecione a data</p>
+        <div class="date-strip" id="date-strip">
+          <div class="date-day" onclick="selectDate(this,'02')"><span class="d-name">Seg</span><span class="d-num">02</span></div>
+          <div class="date-day selected" onclick="selectDate(this,'03')"><span class="d-name">Ter</span><span class="d-num">03</span></div>
+          <div class="date-day" onclick="selectDate(this,'04')"><span class="d-name">Qua</span><span class="d-num">04</span></div>
+          <div class="date-day" onclick="selectDate(this,'05')"><span class="d-name">Qui</span><span class="d-num">05</span></div>
+          <div class="date-day" onclick="selectDate(this,'06')"><span class="d-name">Sex</span><span class="d-num">06</span></div>
+        </div>
+
+        <div class="availability-row">
+          <div>
+            <div class="av-label" id="av-label">Vagas disponíveis</div>
+            <div style="font-size:12px;color:var(--gray-400);font-weight:600;" id="av-sub">Almoço — 03/06</div>
+          </div>
+          <div class="av-value" id="av-value">347 / 500</div>
+        </div>
+
+        <div class="policy-box">
+          <strong>Política de cancelamento:</strong> reservas podem ser canceladas com até 2 horas de antecedência. Um crédito será consumido ao validar a entrada.
+        </div>
+
+        <button class="btn btn-primary" onclick="confirmarReserva()">Confirmar reserva</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 4: CONFIRMAÇÃO
+  ═══════════════════════════════════════════ -->
+  <div id="screen-confirm" class="screen">
+    <div class="confirm-body">
+      <div class="confirm-icon">✅</div>
+      <div class="confirm-title">Reserva confirmada!</div>
+      <div class="confirm-sub">Sua reserva foi realizada com sucesso. Apresente o QR Code na entrada do restaurante.</div>
+      <div class="confirm-details">
+        <div class="cd-row"><span class="cd-label">Turno</span><span class="cd-value" id="conf-turno">Almoço</span></div>
+        <div class="cd-row"><span class="cd-label">Data</span><span class="cd-value" id="conf-data">Ter, 03/06/2026</span></div>
+        <div class="cd-row"><span class="cd-label">Horário</span><span class="cd-value" id="conf-hora">11h – 14h</span></div>
+        <div class="cd-row"><span class="cd-label">Crédito</span><span class="cd-value">1 crédito</span></div>
+      </div>
+      <button class="btn btn-primary" onclick="goTo('screen-ticket')" style="margin-bottom:12px;">Ver meu ticket</button>
+      <button class="btn btn-outline" onclick="goTo('screen-home')">Voltar ao início</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 5: TICKET
+  ═══════════════════════════════════════════ -->
+  <div id="screen-ticket" class="screen">
+    <div class="top-header">
+      <button class="back-btn" onclick="goBack()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Voltar
+      </button>
+      <h2>Meu ticket</h2>
+    </div>
+
+    <div class="scroll-area">
+      <div class="ticket-body">
+        <div class="ticket-card">
+          <div class="ticket-header-inner">
+            <div class="ticket-inst">Restaurante Universitário — IFMA</div>
+            <div class="ticket-meal">☀️ Almoço</div>
+            <div class="ticket-date">Terça-feira, 03 de junho de 2026</div>
+          </div>
+          <div class="qr-wrapper">
+            <!-- QR Code SVG gerado manualmente simulado -->
+            <svg class="qr-svg" viewBox="0 0 21 21" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+              <rect width="21" height="21" fill="white"/>
+              <!-- QR modules simulados -->
+              <g fill="#1a5c2e">
+                <!-- top-left finder -->
+                <rect x="0" y="0" width="7" height="7"/><rect x="1" y="1" width="5" height="5" fill="white"/><rect x="2" y="2" width="3" height="3"/>
+                <!-- top-right finder -->
+                <rect x="14" y="0" width="7" height="7"/><rect x="15" y="1" width="5" height="5" fill="white"/><rect x="16" y="2" width="3" height="3"/>
+                <!-- bottom-left finder -->
+                <rect x="0" y="14" width="7" height="7"/><rect x="1" y="15" width="5" height="5" fill="white"/><rect x="2" y="16" width="3" height="3"/>
+                <!-- data modules -->
+                <rect x="8" y="0" width="1" height="1"/><rect x="10" y="0" width="1" height="1"/><rect x="12" y="0" width="1" height="1"/>
+                <rect x="9" y="1" width="1" height="1"/><rect x="11" y="1" width="1" height="1"/>
+                <rect x="8" y="2" width="1" height="1"/><rect x="10" y="2" width="2" height="1"/>
+                <rect x="8" y="3" width="2" height="1"/><rect x="12" y="3" width="1" height="1"/>
+                <rect x="9" y="4" width="1" height="1"/><rect x="11" y="4" width="2" height="1"/>
+                <rect x="8" y="5" width="1" height="1"/><rect x="10" y="5" width="1" height="1"/>
+                <rect x="7" y="7" width="1" height="1"/><rect x="9" y="7" width="2" height="1"/><rect x="13" y="7" width="1" height="1"/>
+                <rect x="8" y="8" width="1" height="1"/><rect x="10" y="8" width="1" height="1"/><rect x="12" y="8" width="2" height="1"/>
+                <rect x="7" y="9" width="2" height="1"/><rect x="11" y="9" width="1" height="1"/><rect x="14" y="9" width="1" height="1"/>
+                <rect x="8" y="10" width="2" height="1"/><rect x="12" y="10" width="1" height="1"/>
+                <rect x="7" y="11" width="1" height="1"/><rect x="9" y="11" width="3" height="1"/><rect x="14" y="11" width="1" height="1"/>
+                <rect x="8" y="12" width="1" height="1"/><rect x="11" y="12" width="2" height="1"/>
+                <rect x="7" y="13" width="3" height="1"/><rect x="12" y="13" width="2" height="1"/>
+                <rect x="8" y="14" width="1" height="1"/><rect x="10" y="14" width="1" height="1"/>
+                <rect x="14" y="14" width="7" height="1"/> <rect x="14" y="20" width="7" height="1"/>
+                <rect x="14" y="15" width="1" height="1"/><rect x="16" y="15" width="1" height="1"/><rect x="18" y="15" width="1" height="1"/><rect x="20" y="15" width="1" height="1"/>
+                <rect x="15" y="16" width="2" height="1"/><rect x="19" y="16" width="1" height="1"/>
+                <rect x="14" y="17" width="1" height="1"/><rect x="17" y="17" width="2" height="1"/>
+                <rect x="15" y="18" width="1" height="1"/><rect x="18" y="18" width="2" height="1"/>
+                <rect x="9" y="15" width="1" height="1"/><rect x="11" y="15" width="2" height="1"/>
+                <rect x="8" y="16" width="2" height="1"/><rect x="12" y="16" width="1" height="1"/>
+                <rect x="7" y="17" width="1" height="1"/><rect x="9" y="17" width="3" height="1"/>
+                <rect x="8" y="18" width="1" height="1"/><rect x="11" y="18" width="2" height="1"/>
+                <rect x="7" y="19" width="3" height="1"/><rect x="12" y="19" width="1" height="1"/>
+                <rect x="0" y="7" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/>
+                <rect x="1" y="8" width="1" height="1"/><rect x="3" y="8" width="2" height="1"/>
+                <rect x="0" y="9" width="2" height="1"/><rect x="4" y="9" width="1" height="1"/>
+                <rect x="1" y="10" width="3" height="1"/><rect x="5" y="10" width="1" height="1"/>
+                <rect x="0" y="11" width="1" height="1"/><rect x="3" y="11" width="2" height="1"/>
+                <rect x="2" y="12" width="1" height="1"/><rect x="4" y="12" width="2" height="1"/>
+                <rect x="0" y="13" width="3" height="1"/><rect x="5" y="13" width="1" height="1"/>
+              </g>
+            </svg>
+            <div class="valid-badge">
+              <span class="badge badge-valid">● Válido</span>
+            </div>
+            <p class="present-text">Apresente este QR Code na entrada do restaurante</p>
+          </div>
+          <div class="ticket-info">
+            <div class="ticket-info-item">
+              <div class="ti-label">Estudante</div>
+              <div class="ti-value" id="ticket-name">Lucas Garcia</div>
+            </div>
+            <div class="ticket-info-item">
+              <div class="ti-label">Matrícula</div>
+              <div class="ti-value">2024101234</div>
+            </div>
+            <div class="ticket-info-item">
+              <div class="ti-label">Turno</div>
+              <div class="ti-value">Almoço</div>
+            </div>
+            <div class="ticket-info-item">
+              <div class="ti-label">Crédito</div>
+              <div class="ti-value">1 crédito</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-danger" style="margin-top:20px;" onclick="cancelarReserva()">Cancelar reserva</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 6: CARDÁPIO SEMANAL
+  ═══════════════════════════════════════════ -->
+  <div id="screen-cardapio" class="screen">
+    <div class="top-header" style="padding-bottom:0;">
+      <button class="back-btn" onclick="goBack()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Voltar
+      </button>
+      <h2>Cardápio semanal</h2>
+    </div>
+    <div class="days-tab">
+      <button class="day-tab active" onclick="selectDay(this)">Seg 02</button>
+      <button class="day-tab" onclick="selectDay(this)">Ter 03</button>
+      <button class="day-tab" onclick="selectDay(this)">Qua 04</button>
+      <button class="day-tab" onclick="selectDay(this)">Qui 05</button>
+      <button class="day-tab" onclick="selectDay(this)">Sex 06</button>
+    </div>
+
+    <div class="scroll-area">
+      <div class="menu-section">
+        <div class="meal-header">☀️ Almoço</div>
+        <div class="menu-row">
+          <div class="menu-emoji">🍚</div>
+          <div class="menu-info"><div class="m-name">Arroz branco e feijão carioca</div><div class="m-cat">Base</div></div>
+          <span class="badge badge-green">Disponível</span>
+        </div>
+        <div class="menu-row">
+          <div class="menu-emoji">🍗</div>
+          <div class="menu-info"><div class="m-name">Frango grelhado ao limão</div><div class="m-cat">Proteína</div></div>
+          <span class="badge badge-green">Disponível</span>
+        </div>
+        <div class="menu-row">
+          <div class="menu-emoji">🥦</div>
+          <div class="menu-info"><div class="m-name">Brócolis refogado</div><div class="m-cat">Guarnição</div></div>
+          <span class="badge badge-green">Disponível</span>
+        </div>
+        <div class="menu-row">
+          <div class="menu-emoji">🥗</div>
+          <div class="menu-info"><div class="m-name">Salada mista</div><div class="m-cat">Salada</div></div>
+          <span class="badge badge-yellow">Poucas vagas</span>
+        </div>
+        <div class="menu-row">
+          <div class="menu-emoji">🥤</div>
+          <div class="menu-info"><div class="m-name">Suco de maracujá</div><div class="m-cat">Bebida</div></div>
+          <span class="badge badge-green">Disponível</span>
+        </div>
+
+        <div class="meal-header" style="margin-top:8px;">🌙 Jantar</div>
+        <div class="menu-row">
+          <div class="menu-emoji">🍝</div>
+          <div class="menu-info"><div class="m-name">Macarrão ao molho vermelho</div><div class="m-cat">Prato principal</div></div>
+          <span class="badge badge-green">Disponível</span>
+        </div>
+        <div class="menu-row">
+          <div class="menu-emoji">🥩</div>
+          <div class="menu-info"><div class="m-name">Carne bovina moída</div><div class="m-cat">Proteína</div></div>
+          <span class="badge badge-green">Disponível</span>
+        </div>
+        <div class="menu-row" style="margin-bottom:24px;">
+          <div class="menu-emoji">🍊</div>
+          <div class="menu-info"><div class="m-name">Suco de laranja</div><div class="m-cat">Bebida</div></div>
+          <span class="badge badge-green">Disponível</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 7: HISTÓRICO & CRÉDITOS
+  ═══════════════════════════════════════════ -->
+  <div id="screen-hist" class="screen">
+    <div class="hist-header-credits">
+      <button class="back-btn" onclick="goBack()" style="background:none;border:none;color:white;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;padding:0;margin-bottom:12px;opacity:.9;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Voltar
+      </button>
+      <div style="font-size:13px;color:rgba(255,255,255,.75);font-weight:700;text-transform:uppercase;letter-spacing:.06em;">Saldo atual</div>
+      <div class="credits-big">8 créditos</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.65);font-weight:600;margin-bottom:16px;">Válidos até 30/06/2026</div>
+      <button class="btn btn-primary" style="background:white;color:var(--green-main);" onclick="recarregarCreditos()">+ Adquirir créditos</button>
+    </div>
+
+    <div class="scroll-area">
+      <p class="section-title">Movimentações recentes</p>
+      <div class="hist-list">
+        <div class="hist-item">
+          <div class="hist-icon green">☀️</div>
+          <div class="hist-info">
+            <div class="hist-title">Almoço utilizado</div>
+            <div class="hist-sub">Hoje, 12h14 · Entrada validada</div>
+          </div>
+          <div class="hist-value neg">−1</div>
+        </div>
+        <div class="hist-item">
+          <div class="hist-icon moon">🌙</div>
+          <div class="hist-info">
+            <div class="hist-title">Jantar utilizado</div>
+            <div class="hist-sub">Ontem, 18h30 · Entrada validada</div>
+          </div>
+          <div class="hist-value neg">−1</div>
+        </div>
+        <div class="hist-item">
+          <div class="hist-icon blue">💳</div>
+          <div class="hist-info">
+            <div class="hist-title">Recarga de créditos</div>
+            <div class="hist-sub">28/05/2026 · Pagamento aprovado</div>
+          </div>
+          <div class="hist-value pos">+10</div>
+        </div>
+        <div class="hist-item">
+          <div class="hist-icon red">❌</div>
+          <div class="hist-info">
+            <div class="hist-title">Reserva cancelada</div>
+            <div class="hist-sub">25/05/2026 · Almoço — Crédito devolvido</div>
+          </div>
+          <div class="hist-value pos">+1</div>
+        </div>
+        <div class="hist-item">
+          <div class="hist-icon green">☀️</div>
+          <div class="hist-info">
+            <div class="hist-title">Almoço utilizado</div>
+            <div class="hist-sub">24/05/2026 · Entrada validada</div>
+          </div>
+          <div class="hist-value neg">−1</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+
+<script>
+  // ── State ────────────────────────────────────
+  let history = [];
+  let currentRole = 'Estudante';
+  let selectedTurn = 'almoco';
+  let selectedDate = '03';
+
+  // ── Navigation ───────────────────────────────
+  function goTo(screenId) {
+    const curr = document.querySelector('.screen.active');
+    if (curr) {
+      history.push(curr.id);
+      curr.classList.remove('active');
+    }
+    const next = document.getElementById(screenId);
+    if (next) next.classList.add('active');
+    updateStatusBg(screenId);
+    syncNav(screenId);
+  }
+
+  function goBack() {
+    if (history.length === 0) { goTo('screen-home'); return; }
+    const prev = history.pop();
+    const curr = document.querySelector('.screen.active');
+    if (curr) curr.classList.remove('active');
+    const target = document.getElementById(prev);
+    if (target) target.classList.add('active');
+    updateStatusBg(prev);
+    syncNav(prev);
+  }
+
+  function updateStatusBg(screenId) {
+    const greenScreens = ['screen-login'];
+    const sb = document.getElementById('status-bar');
+    // always dark green
+    sb.style.background = 'var(--green-dark)';
+  }
+
+  function syncNav(screenId) {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const map = {
+      'screen-home': 0, 'screen-reserva': 1, 'screen-ticket': 2,
+      'screen-cardapio': 3, 'screen-hist': 4
+    };
+    const idx = map[screenId];
+    if (idx !== undefined) {
+      const navItems = document.querySelectorAll('.nav-item');
+      if (navItems[idx]) navItems[idx].classList.add('active');
+    }
+  }
+
+  // ── Login ────────────────────────────────────
+  function setRole(role) {
+    currentRole = role;
+    const btn = event.currentTarget;
+    document.querySelectorAll('.role-btn').forEach(b => b.style.opacity = '.5');
+    btn.style.opacity = '1';
+    document.getElementById('username-display').textContent = role === 'Estudante' ? 'Lucas Garcia' : role;
+  }
+
+  // ── Reserva ──────────────────────────────────
+  function selectTurn(turn) {
+    selectedTurn = turn;
+    document.getElementById('turn-almoco').classList.toggle('selected', turn === 'almoco');
+    document.getElementById('turn-jantar').classList.toggle('selected', turn === 'jantar');
+    document.getElementById('av-sub').textContent = (turn === 'almoco' ? 'Almoço' : 'Jantar') + ' — ' + selectedDate + '/06';
+    document.getElementById('av-value').textContent = turn === 'almoco' ? '347 / 500' : '212 / 400';
+  }
+
+  function selectDate(el, date) {
+    selectedDate = date;
+    document.querySelectorAll('.date-day').forEach(d => d.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('av-sub').textContent = (selectedTurn === 'almoco' ? 'Almoço' : 'Jantar') + ' — ' + date + '/06';
+  }
+
+  function confirmarReserva() {
+    const turno = selectedTurn === 'almoco' ? 'Almoço' : 'Jantar';
+    const hora = selectedTurn === 'almoco' ? '11h – 14h' : '17h – 20h';
+    const dias = {'02':'Seg','03':'Ter','04':'Qua','05':'Qui','06':'Sex'};
+    document.getElementById('conf-turno').textContent = turno;
+    document.getElementById('conf-data').textContent = dias[selectedDate] + ', ' + selectedDate + '/06/2026';
+    document.getElementById('conf-hora').textContent = hora;
+    goTo('screen-confirm');
+  }
+
+  function cancelarReserva() {
+    if (confirm('Deseja cancelar esta reserva? 1 crédito será devolvido.')) {
+      alert('✅ Reserva cancelada. Crédito devolvido ao seu saldo.');
+      goTo('screen-home');
+    }
+  }
+
+  // ── Cardápio ─────────────────────────────────
+  function selectDay(el) {
+    document.querySelectorAll('.day-tab').forEach(d => d.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ── Créditos ─────────────────────────────────
+  function recarregarCreditos() {
+    alert('💳 Você será redirecionado para o sistema de pagamento institucional do IFMA.');
+  }
+
+  // ── Acessibilidade ───────────────────────────
+  function toggleA11y() {
+    document.body.classList.toggle('high-contrast');
+    const on = document.body.classList.contains('high-contrast');
+    document.querySelectorAll('.a11y-btn').forEach(b => {
+      b.textContent = on ? '♿ Alto contraste: ON' : '♿ Acessibilidade';
+    });
+  }
+
+  // Clock
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    document.querySelector('.status-bar span').textContent = h + ':' + m;
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+</script>
+</body>
+</html>
